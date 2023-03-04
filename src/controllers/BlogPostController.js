@@ -39,8 +39,29 @@ const createBlogPost = async (req, res) => {
   return res.status(201).json(blogPostCreated);
 };
 
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const userId = req.payload.payload.id;
+
+  const isPostOwner = await BlogPostService.searchPostByUserId(userId);
+
+  if (!isPostOwner) {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+
+  if (!title || !content) {
+    return res.status(400).json({ message: 'Some required fields are missing' });
+  }
+
+  const updatedPost = await BlogPostService.updatePost(id, { title, content });
+
+  return res.status(200).json(updatedPost);
+};
+
 module.exports = {
   getAllPostsWithUserAndCategory,
   getUniquePostWithUserAndCategory,
   createBlogPost,
+  updatePost,
 };
