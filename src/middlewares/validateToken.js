@@ -2,13 +2,13 @@ const { verifyToken } = require('../auth/jwt');
 
 const validateToken = (req, res, next) => {
   try {
-    const { Authorization } = req.headers;
+    const { authorization } = req.headers;
 
-    if (!Authorization) {
-      return res.status(401).json({ message: 'Token não enviado' });
+    if (!authorization) {
+      return res.status(401).json({ message: 'Token not found' });
     }
 
-    const payload = verifyToken(Authorization);
+    const payload = verifyToken(authorization);
 
     req.payload = payload.data;
     next();
@@ -17,4 +17,4 @@ const validateToken = (req, res, next) => {
   }
 };
 
-module.exports = validateToken;
+module.exports = { validateToken };
