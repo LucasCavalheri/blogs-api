@@ -1,7 +1,10 @@
 const { User } = require('../models');
 
-const getAllUsers = () =>
-  User.findAll({ attributes: { exclude: ['password'] } });
+const excludePassword = { attributes: { exclude: ['password'] } };
+
+const getAllUsers = () => User.findAll(excludePassword);
+
+const getUserById = (id) => User.findByPk(id, excludePassword);
 
 const searchByPassword = (password) => User.findOne({ where: { password } });
 
@@ -11,6 +14,7 @@ const createUser = (userData) => User.create(userData);
 
 module.exports = {
   getAllUsers,
+  getUserById,
   searchByPassword,
   searchByEmail,
   createUser,
