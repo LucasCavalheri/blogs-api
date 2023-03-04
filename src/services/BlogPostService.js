@@ -8,6 +8,15 @@ const getAllPostsWithUserAndCategory = async () =>
     ],
   });
 
+const getUniquePostWithUserAndCategory = async (id) =>
+  BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
 const createBlogPost = async ({ title, content, userId, categoryIds }) => {
   try {
     const result = await sequelize.transaction(async (t) => {
@@ -34,5 +43,6 @@ const createBlogPost = async ({ title, content, userId, categoryIds }) => {
 
 module.exports = {
   getAllPostsWithUserAndCategory,
+  getUniquePostWithUserAndCategory,
   createBlogPost,
 };
