@@ -7,6 +7,18 @@ const getAllPostsWithUserAndCategory = async (_req, res) => {
   return res.status(200).json(allPostsWithUserAndCategory);
 };
 
+const getUniquePostWithUserAndCategory = async (req, res) => {
+  const { id } = req.params;
+
+  const uniquePostWithUserAndCategory = await BlogPostService.getUniquePostWithUserAndCategory(id);
+
+  if (!uniquePostWithUserAndCategory) {
+    return res.status(404).json({ message: 'Post does not exist' });
+  }
+
+  return res.status(200).json(uniquePostWithUserAndCategory);
+};
+
 const createBlogPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   const userId = req.payload.payload.id;
@@ -29,5 +41,6 @@ const createBlogPost = async (req, res) => {
 
 module.exports = {
   getAllPostsWithUserAndCategory,
+  getUniquePostWithUserAndCategory,
   createBlogPost,
 };
