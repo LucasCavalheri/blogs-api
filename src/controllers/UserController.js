@@ -1,6 +1,12 @@
 const { createToken } = require('../auth/jwt');
 const UserService = require('../services/UserService');
 
+const getAllUsers = async (_req, res) => {
+  const users = await UserService.getAllUsers();
+
+  return res.status(200).json(users);
+};
+
 const createUser = async (req, res) => {
   const userData = req.body;
 
@@ -20,4 +26,5 @@ const createUser = async (req, res) => {
 
 module.exports = {
   createUser,
+  getAllUsers,
 };
