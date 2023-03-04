@@ -1,6 +1,12 @@
-const { BlogPost, PostCategory, User, Category, sequelize } = require('../models');
+const {
+  BlogPost,
+  PostCategory,
+  User,
+  Category,
+  sequelize,
+} = require('../models');
 
-const getAllPostsWithUserAndCategory = async () => 
+const getAllPostsWithUserAndCategory = async () =>
   BlogPost.findAll({
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
@@ -15,6 +21,11 @@ const getUniquePostWithUserAndCategory = async (id) =>
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories' },
     ],
+  });
+
+const searchPostByUserId = async (userId) =>
+  BlogPost.findOne({
+    where: { userId },
   });
 
 const createBlogPost = async ({ title, content, userId, categoryIds }) => {
@@ -41,8 +52,27 @@ const createBlogPost = async ({ title, content, userId, categoryIds }) => {
   }
 };
 
+const updatePost = async (id, { title, content }) => {
+  await BlogPost.update(
+    { title, content },
+    { where: { id } },
+  );
+
+  const getUpdatedPost = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  return getUpdatedPost;
+};
+
 module.exports = {
   getAllPostsWithUserAndCategory,
   getUniquePostWithUserAndCategory,
+  searchPostByUserId,
   createBlogPost,
+  updatePost,
 };
