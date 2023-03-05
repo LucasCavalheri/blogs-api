@@ -9,5 +9,6 @@ router.get('/', validateToken, BlogPostController.getAllPostsWithUserAndCategory
 router.get('/:id', validateToken, BlogPostController.getUniquePostWithUserAndCategory);
 router.post('/', validateToken, BlogPostController.createBlogPost);
 router.put('/:id', validateToken, BlogPostController.updatePost);
+router.delete('/:id', validateToken, BlogPostController.deletePost);
 
 module.exports = router;
