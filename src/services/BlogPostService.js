@@ -28,6 +28,11 @@ const searchPostByUserId = async (userId) =>
     where: { userId },
   });
 
+const searchPostById = async (id) =>
+  BlogPost.findByPk(id, { include: [{ model: User, as: 'user' }] });
+
+const checkUserPost = async (id) => searchPostById(id);
+
 const createBlogPost = async ({ title, content, userId, categoryIds }) => {
   try {
     const result = await sequelize.transaction(async (t) => {
@@ -53,10 +58,7 @@ const createBlogPost = async ({ title, content, userId, categoryIds }) => {
 };
 
 const updatePost = async (id, { title, content }) => {
-  await BlogPost.update(
-    { title, content },
-    { where: { id } },
-  );
+  await BlogPost.update({ title, content }, { where: { id } });
 
   const getUpdatedPost = await BlogPost.findOne({
     where: { id },
@@ -69,10 +71,15 @@ const updatePost = async (id, { title, content }) => {
   return getUpdatedPost;
 };
 
+const deletePost = async (id) => BlogPost.destroy({ where: { id } });
+
 module.exports = {
   getAllPostsWithUserAndCategory,
   getUniquePostWithUserAndCategory,
   searchPostByUserId,
+  searchPostById,
+  checkUserPost,
   createBlogPost,
   updatePost,
+  deletePost,
 };
