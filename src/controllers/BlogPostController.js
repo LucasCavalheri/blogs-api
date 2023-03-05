@@ -19,6 +19,19 @@ const getUniquePostWithUserAndCategory = async (req, res) => {
   return res.status(200).json(uniquePostWithUserAndCategory);
 };
 
+const getBlogPostByQuery = async (req, res) => {
+  const { q } = req.query;
+
+  const blogPost = await BlogPostService.getBlogPostByQuery(q);
+
+  if (!q) {
+    const allBlogPosts = await BlogPostService.getAllPostsWithUserAndCategory();
+    return res.status(200).json(allBlogPosts);
+  }
+
+  return res.status(200).json(blogPost);
+};
+
 const createBlogPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   const userId = req.payload.payload.id;
@@ -82,6 +95,7 @@ const deletePost = async (req, res) => {
 module.exports = {
   getAllPostsWithUserAndCategory,
   getUniquePostWithUserAndCategory,
+  getBlogPostByQuery,
   createBlogPost,
   updatePost,
   deletePost,
