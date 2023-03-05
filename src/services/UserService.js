@@ -12,10 +12,13 @@ const searchByEmail = (email) => User.findOne({ where: { email } });
 
 const createUser = (userData) => User.create(userData);
 
+const deleteUser = (id) => User.destroy({ where: { id } });
+
 module.exports = {
   getAllUsers,
   getUserById,
   searchByPassword,
   searchByEmail,
   createUser,
+  deleteUser,
 };
